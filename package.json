@@ -1,0 +1,14 @@
+{
+  "name": "challenge-toolbox",
+  "version": "1.0.0",
+  "description": "Pruebas de automatización con Cypress para ecommerce",
+  "type": "module",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run"
+  },
+  "dependencies": {
+    "cypress": "^13.6.1"
+  }
+}
