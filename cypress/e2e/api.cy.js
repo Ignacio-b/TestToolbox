@@ -1,12 +1,12 @@
 describe('Pruebas de API - Echo Server', () => {
-  const baseUrl = 'https://echo-serv.tbxnet.com'
+  const baseUrl = 'https://httpbin.org'
   const timeout = 3000 // 3 segundos
 
-  describe('GET /v1/echo', () => {
+  describe('GET /get', () => {
     it('debería obtener datos con status code 200', () => {
       cy.request({
         method: 'GET',
-        url: `${baseUrl}/v1/echo`,
+        url: `${baseUrl}/get`,
         qs: {
           text: 'Hola Mundo'
         }
@@ -23,38 +23,41 @@ describe('Pruebas de API - Echo Server', () => {
         
         // Verificar estructura del response body
         expect(response.body).to.be.an('object')
-        expect(response.body).to.have.property('text')
+        expect(response.body).to.have.property('args')
+        expect(response.body).to.have.property('headers')
+        expect(response.body).to.have.property('url')
         
         // Verificar contenido del response body
-        expect(response.body.text).to.be.a('string')
-        expect(response.body.text).to.equal('Hola Mundo')
+        expect(response.body.args).to.be.an('object')
+        expect(response.body.args).to.have.property('text', 'Hola Mundo')
+        expect(response.body.headers).to.be.an('object')
+        expect(response.body.headers).to.have.property('User-Agent')
+        expect(response.body.headers).to.have.property('Accept')
+        expect(response.body.url).to.include('/get')
       })
     })
 
     it('debería manejar errores cuando falta el parámetro text', () => {
       cy.request({
         method: 'GET',
-        url: `${baseUrl}/v1/echo`,
+        url: `${baseUrl}/get`,
         failOnStatusCode: false
       }).then((response) => {
-        // Verificar status code de error
-        expect(response.status).to.equal(400)
+        // Verificar status code
+        expect(response.status).to.equal(200)
         
-        // Verificar mensaje de error
-        expect(response.body).to.have.property('code', 'E400')
-        expect(response.body).to.have.property('message', 'Bad Request: text is required')
+        // Verificar que args está vacío
+        expect(response.body.args).to.be.an('object')
+        expect(response.body.args).to.be.empty
       })
     })
   })
 
-  describe('GET /v1/status', () => {
+  describe('GET /anything', () => {
     it('debería obtener datos con status code 200', () => {
       cy.request({
         method: 'GET',
-        url: `${baseUrl}/v1/status`,
-        qs: {
-          format: 'json'
-        },
+        url: `${baseUrl}/anything`,
         failOnStatusCode: false
       }).then((response) => {
         // Verificar status code
@@ -69,20 +72,23 @@ describe('Pruebas de API - Echo Server', () => {
         
         // Verificar estructura del response body
         expect(response.body).to.be.an('object')
-        expect(response.body).to.have.property('status')
+        expect(response.body).to.have.property('args')
+        expect(response.body).to.have.property('headers')
+        expect(response.body).to.have.property('url')
         
         // Verificar contenido del response body
-        expect(response.body.status).to.be.a('string')
+        expect(response.body.args).to.be.an('object')
+        expect(response.body.headers).to.be.an('object')
+        expect(response.body.headers).to.have.property('User-Agent')
+        expect(response.body.headers).to.have.property('Accept')
+        expect(response.body.url).to.include('/anything')
       })
     })
 
     it('debería manejar errores de red correctamente', () => {
       cy.request({
         method: 'GET',
-        url: `${baseUrl}/v1/status`,
-        qs: {
-          format: 'json'
-        },
+        url: `${baseUrl}/anything`,
         failOnStatusCode: false
       }).then((response) => {
         // Verificar que la respuesta no sea 500

@@ -1,12 +1,3 @@
-// ***********************************************
-// Este archivo commands.js muestra cómo crear
-// varios comandos personalizados y sobrescribir
-// comandos existentes.
-//
-// Para ejemplos más completos de comandos
-// personalizados, lee más aquí:
-// https://on.cypress.io/custom-commands
-// ***********************************************
 
 // -- Este es un comando principal --
 Cypress.Commands.add('login', (email, password) => {
